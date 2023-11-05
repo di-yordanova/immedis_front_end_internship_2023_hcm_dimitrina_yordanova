@@ -7,12 +7,13 @@ import { LoginComponent } from './login/login.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ProfilePageComponent
+    ProfilePageComponent,
   ],
   imports: [
     BrowserModule,
@@ -20,6 +21,7 @@ import { FormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatSlideToggleModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

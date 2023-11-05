@@ -4,6 +4,7 @@
     flex-direction: row;
 
     .sidebar {
+        display: flex;
         width: 220px;
         background: rgba(209, 223, 223, 0.5);
         padding: 5px;
@@ -16,11 +17,14 @@
 
         .logo {
             margin-top: 10px;
-            width: 190px;
-            height: 100px;
+            width: 150px;
+            height: 50px;
             margin-bottom: 20px;
             border-radius: 30px;
             text-align: center;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-top: 20px;
         }
 
         .material-icons {
@@ -34,7 +38,6 @@
         }
 
         nav ul li {
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
             margin-bottom: 10px;
@@ -53,7 +56,7 @@
         justify-content: left;
         align-items: left;
         width: 100%;
-        padding: 30px;
+        padding: 25px;
         font-size: 26px;
         color: #005151;
         font-family: "Gill Sans", sans-serif;
@@ -61,12 +64,65 @@
         .profile-page-name {
             color: #005151;
             font-size: 40px;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-avatar {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            clip-path: inset(10% round 30px);
+        }
+
+        .change-photo-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            clip-path: inset(10% round 30px);
+        }
+
+        .avatar-container:hover .change-photo-overlay {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .avatar-container:hover .change-photo-overlay {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .change-icon {
+            color: white;
+            font-size: 36px;
+        }
+
+        .user-name {
+            font-size: 24px;
+            font-weight: 600;
         }
 
         .profile-section {
             text-align: left;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         button {
@@ -79,23 +135,37 @@
             margin-top: 5px;
         }
 
-        button.edit-btn {
+        .profile-edit-btn {
+            background: radial-gradient(#f7e89d, #079999);
+            color: black;
+            font-weight: 500;
+        }
+
+        .profile-save-btn {
             background: linear-gradient(#2fcebb, #005151);
             color: white;
             font-weight: 500;
         }
 
-        button.save-btn {
-            background: linear-gradient(#2fcebb, #005151);
-            color: white;
-            font-weight: 500;
+        .edit-input {
+            border-radius: 30px;
+            padding: 5px;
+            border-color: #f7e89d;
         }
+
+        .profile-edit-btn.active,
+        .profile-save-btn.active {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
 
         .sections {
             display: flex;
             flex-direction: row;
             justify-content: space-around;
             width: 100%;
+            margin-bottom: 20px;
         }
 
         .section {
@@ -113,8 +183,63 @@
         }
 
         .section.active {
-            background: linear-gradient(#2fcebb, #005151);;
+            background: linear-gradient(#2fcebb, #005151);
             color: white;
+            transform: scale(1.1);
+            /* Уголемява бутона с 10% при натискане */
+            transition: transform 0.3s ease;
+            /* Плавен преход за трансформацията */
+        }
+
+        .personal-data {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .column {
+            flex: 1;
+        }
+
+        .label {
+            font-weight: 500;
+            font-size: 20px;
+        }
+
+        .value {
+            margin-right: 10px;
+            font-weight: 300;
+            font-size: 16px;
+        }
+
+        .personal-edit-btn {
+            background: linear-gradient(#2fcebb, #005151);
+            color: white;
+            font-weight: 300;
+            padding: 10px 20px;
+            font-size: 10px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-left: auto;
+            display: flex;
+            align-items: left;
+        }
+
+        .edit-btn {
+            border-radius: 30px;
+            background: radial-gradient(#f7e89d, #079999);
+        }
+
+        .save-btn {
+            border-radius: 30px;
+            background: radial-gradient(#f7e89d, #f5c800);
         }
     }
 }
