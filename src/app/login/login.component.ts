@@ -47,7 +47,6 @@ export class LoginComponent {
   }
   
   private isValidUser(): boolean {
-    // Примерен вход
     const validUsername = 'admin@example.com';
     const validPassword = 'password123';
 

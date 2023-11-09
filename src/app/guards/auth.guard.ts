@@ -15,18 +15,14 @@ export class AuthGuard implements CanActivate {
 
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
-      // Проверка на типа потребител
-      if (next.data.roles && next.data.roles.indexOf(currentUser.role) === -1) {
-        // Ролята на потребителя не е позволена, пренасочване към началната страница
+      if (next.data['roles'] && next.data['roles'].indexOf(currentUser.role) === -1) {
         this.router.navigate(['/']);
         return false;
       }
 
-      // Оторизиран достъп
       return true;
     }
 
-    // Неоторизиран достъп, пренасочване към страницата за вход
     this.router.navigate(['/login']);
     return false;
   }
