@@ -1,27 +1,38 @@
-# ImmedisFrontEndInternship2023HcmDimitrinaYordanova
-
+# Human Capital Management Application (HCMApp) Project
+Welcome to the repository of HCMApp - a modern Angular-based application designed for effective human capital management within organizations. 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6.
 
-## Development server
+## Key Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+ - Login Page: User-friendly login interface.
+ - Profile Page: User-centric page where employees can manage their personal information.
+ - Departments Page: Overview of information about the company's departments.
+ - Dashboard: Centralized control panel providing an overview.
 
-## Code scaffolding
+## Technologies
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+ - Angular: Utilizing the latest version of Angular for a dynamic and responsive frontend.
+   
+## Design
 
-## Build
+ - Created desing in Figma by me 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Prerequisites
 
-## Running unit tests
+ - Node.js
+ - npm (Node Package Manager)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Installation
 
-## Running end-to-end tests
+ - Clone the repository - git clone [repository URL]
+ - Install NPM packages - npm install
+ - Start the development server - ng serve
+ - Open http://localhost:4200/ in your browser to view the application.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Commands 
 
-## Further help
+ - To generate a new component - run `ng generate component component-name`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Contacts
+
+ - https://www.linkedin.com/in/dimitrina-yordanova-81a659245/
