@@ -15,12 +15,13 @@
             <img class="logo" src="/assets/logo-green.png">
             <nav>
                 <ul>
-                    <li><i class="material-icons">person</i> <a routerLink="/profile-page" [ngClass]="{'active': isProfileActive}"
-                            (click)="activateProfile()">Profile</a></li>
-                    <li><i class="material-icons">dashboard</i> <a href="#dashboard" [class.active]="isDashboardActive"
-                            (click)="activateDashboard()">Dashboard</a></li>
-                    <li><i class="material-icons">business</i> <a href="#departments"
-                            [class.active]="isDepartmentActive" (click)="activateDepartment()">Departments</a></li>
+                    <li><i class="material-icons">person</i> <a routerLink="/profile-page"
+                            [ngClass]="{'active': isProfileActive}" (click)="activateProfile()">Profile</a></li>
+                    <li><i class="material-icons">dashboard</i> <a routerLink="/dashboard"
+                            [ngClass]="{'active':isDashboardActive}" (click)="activateDashboard()">Dashboard</a></li>
+                    <li><i class="material-icons">business</i> <a routerLink="/departments"
+                            [ngClass]="{'active':isDepartmentActive}" (click)="activateDepartment()">Departments</a>
+                    </li>
                     <li><i class="material-icons">exit_to_app</i> <a href="#logout" (click)="logout()">Log Out</a></li>
                 </ul>
             </nav>
@@ -29,6 +30,26 @@
             <div class="profile-section">
                 <div class="profile-section">
                     <div class="departments-name">Departments</div>
+                </div>
+            </div>
+            <div class="squares-container">
+                <div class="square" *ngFor="let department of departments; let i = index">
+                    <div class="image-container" (mouseenter)="isHovered = true" (mouseleave)="isHovered = false">
+                        <img [src]="department.imageUrl" class="square-image">
+                        <div *ngIf="isHovered" class="change-photo-overlay" (click)="onFileSelected()">
+                            <i class="material-icons change-icon">camera_alt</i>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!editingTitle[i]">{{ department.title }}</div>
+                    <input *ngIf="editingTitle[i]" [(ngModel)]="department.title" class="square-title">
+                    <button *ngIf="!editingTitle[i]" (click)="editTitle(i)">Edit</button>
+                    <button *ngIf="editingTitle[i]" (click)="saveTitle(i)">Save</button>
+
+                    <div *ngIf="!editingSubtitle[i]">{{ department.subtitle }}</div>
+                    <input *ngIf="editingSubtitle[i]" [(ngModel)]="department.subtitle" class="square-subtitle">
+                    <button *ngIf="!editingSubtitle[i]" (click)="editSubtitle(i)">Edit</button>
+                    <button *ngIf="editingSubtitle[i]" (click)="saveSubtitle(i)">Save</button>
                 </div>
             </div>
         </div>

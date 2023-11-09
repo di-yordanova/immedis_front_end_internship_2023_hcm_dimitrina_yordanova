@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface PersonalInfoField {
   label: string;
   value: string;
   isEditing: boolean;
   editedValue?: string;
+  options?: string[];
+  showDropdown?: boolean;
 }
 
 interface DepartmentField {
@@ -14,6 +17,8 @@ interface DepartmentField {
   value: string;
   isEditing: boolean;
   editedValue?: string;
+  options?: string[];
+  showDropdown?: boolean;
 }
 
 interface SalaryField {
@@ -21,6 +26,13 @@ interface SalaryField {
   value: string;
   isEditing: boolean;
   editedValue?: string;
+  options?: string[];
+  showDropdown?: boolean;
+}
+
+interface NewField {
+  label: string;
+  value: string;
 }
 
 @Component({
@@ -39,21 +51,49 @@ export class ProfilePageComponent implements OnInit {
   isDepartmentInfoActive: boolean = false;
   isSalaryInfoActive: boolean = false;
   isSaving: boolean = false;
+  isDropdownOpen: boolean = false;
+  isAddingNewField: boolean = false;
+  newFieldLabel: string = '';
 
   userAvatarUrl: string | ArrayBuffer | null = null;
   isHovered: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) {
+    const storedPersonalInfoFields = localStorage.getItem('personalInfoFields');
+    const storedDepartmentFields = localStorage.getItem('departmentFields');
+    const storedSalaryFields = localStorage.getItem('salaryFields');
+
+    if (storedPersonalInfoFields) {
+      this.personalInfoFields = JSON.parse(storedPersonalInfoFields);
+    }
+
+    if (storedDepartmentFields) {
+      this.departmentFields = JSON.parse(storedDepartmentFields);
+    }
+
+    if (storedSalaryFields) {
+      this.salaryFields = JSON.parse(storedSalaryFields);
+    }
+
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      this.username = storedUsername;
+    }
+
+  }
 
   ngOnInit(): void {
-    // Проверете Local Storage за URL на снимката при зареждане на компонента
     const storedUserAvatarUrl = localStorage.getItem('userAvatarUrl');
     const storedPersonalInfoFields = localStorage.getItem('personalInfoFields');
-    
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      this.username = storedUsername;
+    }
+
     if (storedUserAvatarUrl) {
       this.userAvatarUrl = storedUserAvatarUrl;
     }
-     if (storedPersonalInfoFields) {
+    if (storedPersonalInfoFields) {
       this.personalInfoFields = JSON.parse(storedPersonalInfoFields);
     }
   }
@@ -102,50 +142,46 @@ export class ProfilePageComponent implements OnInit {
   salaryControl: FormControl = new FormControl("");
 
   personalInfoFields: PersonalInfoField[] = [
-    { label: "Full name", value: "Dimitrina Georgieva Yordanova", isEditing: false },
-    { label: "Phone number", value: "0899315081", isEditing: false },
-    { label: "Email address", value: "di.gyordanova@gmail.com", isEditing: false },
-    { label: "Date of Birth", value: "10/12/1997", isEditing: false },
-    { label: "Gender", value: "Female", isEditing: false },
-    { label: "Nationality", value: "Bulgarian", isEditing: false },
-    { label: "Languages", value: "English, Bulgarian", isEditing: false },
+    { label: "Full name", value: "Dimitrina Georgieva Yordanova", isEditing: false, options: ["Man", "Woman"] },
+    { label: "Phone number", value: "0899315081", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Email address", value: "di.gyordanova@gmail.com", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Date of Birth", value: "10/12/1997", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Gender", value: "Female", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Country", value: "Bulgaria", isEditing: false, options: ["Bulgaria", "Rumania", "Spain"] },
+    { label: "Languages", value: "English", isEditing: false, options: ["English", "Bulgarian", "Spanish", "French", "German", "Other"] },
+    { label: "Full name", value: "Dimitrina Georgieva Yordanova", isEditing: false, options: ["Man", "Woman"] },
   ];
 
   departmentFields: DepartmentField[] = [
-    { label: "Department", value: "IT", isEditing: false },
-    { label: "Job Title", value: "Developer", isEditing: false },
-    { label: "Supervisor", value: "Silvia Slavova", isEditing: false },
-    { label: "Employee Status", value: "Full-time", isEditing: false },
-    { label: "Joining Date", value: "2023-14-11", isEditing: false },
-    { label: "Work Location", value: "Remote", isEditing: false }
+    { label: "Department", value: "IT", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Job Title", value: "Developer", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Supervisor", value: "Silvia Slavova", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Employee Status", value: "Full-time", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Joining Date", value: "2023-14-11", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Work Location", value: "Remote", isEditing: false, options: ["Man", "Woman", "Other"] }
   ];
 
   salaryFields: SalaryField[] = [
-    { label: "Salary", value: "1500", isEditing: false },
-    { label: "Currency", value: "USD", isEditing: false }
+    { label: "Salary", value: "1500", isEditing: false, options: ["Man", "Woman", "Other"] },
+    { label: "Currency", value: "USD", isEditing: false, options: ["USD", "LV", "Other"] }
   ];
 
   onProfileImageClick(): void {
-    // Създаване на input елемент от тип "file"
     const inputElement: HTMLInputElement = document.createElement('input');
     inputElement.type = 'file';
-    inputElement.accept = 'image/*'; // Само изображения са разрешени
+    inputElement.accept = 'image/*';
 
-    // Добавяне на event listener, който се изпълнява, когато потребителят избере файл
     inputElement.addEventListener('change', (event: Event) => {
       const target = event.target as HTMLInputElement;
       const files = target.files;
 
       if (files && files.length > 0) {
-        const file: File = files[0]; // Взимане на първия избран файл
+        const file: File = files[0];
 
         const reader = new FileReader();
         reader.onload = () => {
           const img = new Image();
           img.onload = () => {
-            // Тук може да извършите допълнителна обработка на изображението, ако е необходимо
-
-            // Пример: Променяте профилната снимка с новата
             this.userAvatarUrl = reader.result as string;
             localStorage.setItem('userAvatarUrl', this.userAvatarUrl);
           };
@@ -154,29 +190,55 @@ export class ProfilePageComponent implements OnInit {
         reader.readAsDataURL(file);
       }
     });
-
-    // Имитиране на кликване на input елемента, за да се отвори диалоговият прозорец за избор на файл
     inputElement.click();
   }
 
-
-  editFieldData(field: PersonalInfoField) {
+  editFieldData(field: any): void {
     field.isEditing = true;
     field.editedValue = field.value;
+    field.showDropdown = false;
   }
 
-  saveFieldData(field: PersonalInfoField) {
+  cancelEditField(field: any): void {
+    field.isEditing = false;
+    field.editedValue = field.value;
+    field.showDropdown = false;
+  }
+
+  saveFieldData(field: any): void {
     field.isEditing = false;
     if (field.editedValue !== undefined) {
       field.value = field.editedValue;
     }
-
-    // Запазване на актуалните данни в Local Storage
+    field.options = undefined;
+    field.showDropdown = false;
     localStorage.setItem('personalInfoFields', JSON.stringify(this.personalInfoFields));
+    localStorage.setItem('departmentFields', JSON.stringify(this.departmentFields));
+    localStorage.setItem('salaryFields', JSON.stringify(this.salaryFields));
   }
 
-  deleteFieldData(field: PersonalInfoField) {
+  toggleDropdown(field: PersonalInfoField): void {
+    if (field.isEditing) {
+      field.showDropdown = !field.showDropdown;
+    }
+  }
+  toggleDropdownOnArrowClick(field: PersonalInfoField) {
+    field.showDropdown = !field.showDropdown;
+  }
 
+  selectOption(field: PersonalInfoField, option: string): void {
+    field.editedValue = option;
+    field.showDropdown = false;
+  }
+
+  deleteField(field: any, fieldArray: any[]): void {
+    const index = fieldArray.indexOf(field);
+    if (index !== -1) {
+      fieldArray.splice(index, 1);
+      localStorage.setItem('personalInfoFields', JSON.stringify(this.personalInfoFields));
+      localStorage.setItem('departmentFields', JSON.stringify(this.departmentFields));
+      localStorage.setItem('salaryFields', JSON.stringify(this.salaryFields));
+    }
   }
 
   editUsername() {
@@ -188,6 +250,7 @@ export class ProfilePageComponent implements OnInit {
     this.isEditing = false;
     this.username = this.editedUsername;
     this.editedUsername = '';
+    localStorage.setItem('username', this.username);
   }
 
   editPersonalInfo() {
@@ -196,24 +259,85 @@ export class ProfilePageComponent implements OnInit {
   savePersonalInfo() {
   }
 
+  newField: NewField = {
+    label: '',
+    value: ''
+  };
+
+  addNewField(): void {
+    if (this.newField.label && this.newField.value) {
+      const field: PersonalInfoField = {
+        label: this.newField.label,
+        value: this.newField.value,
+        isEditing: false,
+      };
+
+      if (this.isPersonalInfoActive) {
+        this.personalInfoFields.push(field);
+        localStorage.setItem('personalInfoFields', JSON.stringify(this.personalInfoFields));
+      } else if (this.isDepartmentInfoActive) {
+        this.departmentFields.push(field);
+        localStorage.setItem('departmentFields', JSON.stringify(this.departmentFields));
+      } else if (this.isSalaryInfoActive) {
+        this.salaryFields.push(field);
+        localStorage.setItem('salaryFields', JSON.stringify(this.salaryFields));
+      }
+      this.isAddingNewField = false;
+      this.newField.label = '';
+      this.newField.value = '';
+    } else {
+      alert('Please enter label and value for the new field.');
+    }
+  }
+
   addNewPersonalField() {
-    const newField: PersonalInfoField = { label: "New Field", value: "", isEditing: true };
-    this.personalInfoFields.push(newField);
+    this.isAddingNewField = true;
   }
   addNewDepartmentField() {
-    const newField: DepartmentField = { label: "New Field", value: "", isEditing: true };
-    this.departmentFields.push(newField);
+    this.isAddingNewField = true;
   }
   addNewSalaryField() {
-    const newField: SalaryField = { label: "New Field", value: "", isEditing: true };
-    this.salaryFields.push(newField);
+    this.isAddingNewField = true;
   }
+
+  saveNewField(): void {
+    if (!this.newField.label || !this.newField.value) {
+      alert('Please enter label and value for the new field.');
+      return;
+    }
+
+    const newField = {
+      label: this.newField.label,
+      value: this.newField.value,
+      isEditing: false
+    };
+
+    if (this.isPersonalInfoActive) {
+      this.personalInfoFields.push(newField);
+      localStorage.setItem('personalInfoFields', JSON.stringify(this.personalInfoFields));
+    } else if (this.isDepartmentInfoActive) {
+      this.departmentFields.push(newField); 
+      localStorage.setItem('departmentFields', JSON.stringify(this.departmentFields));
+    } else if (this.isSalaryInfoActive) {
+      this.salaryFields.push(newField); 
+      localStorage.setItem('salaryFields', JSON.stringify(this.salaryFields));
+    }
+
+    this.newField.label = '';
+    this.newField.value = '';
+
+    this.isAddingNewField = false;
+  }
+
 
   activateProfile() {
     this.isProfileActive = true;
     this.isPersonalActive = false;
     this.isDepartmentActive = false;
     this.isSalaryActive = false;
+    this.router.navigateByUrl('/profile-page', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/profile-page']);
+    });
   }
   // При натискане на тези бутони, кое се появява и кое не
   activatePersonal() {
@@ -252,4 +376,5 @@ export class ProfilePageComponent implements OnInit {
 
   logout() {
   }
+
 }

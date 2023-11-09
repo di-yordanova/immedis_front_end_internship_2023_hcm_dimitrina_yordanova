@@ -15,12 +15,13 @@
             <img class="logo" src="/assets/logo-green.png">
             <nav>
                 <ul>
-                    <li><i class="material-icons">person</i> <a routerLink="/profile-page" [ngClass]="{'active': isProfileActive}"
-                            (click)="activateProfile()">Profile</a></li>
-                    <li><i class="material-icons">dashboard</i> <a href="#dashboard" [class.active]="isDashboardActive"
-                            (click)="activateDashboard()">Dashboard</a></li>
-                    <li><i class="material-icons">business</i> <a href="#departments"
-                            [class.active]="isDepartmentActive" (click)="activateDepartment()">Departments</a></li>
+                    <li><i class="material-icons">person</i> <a routerLink="/profile-page"
+                            [ngClass]="{'active': isProfileActive}" (click)="activateProfile()">Profile</a></li>
+                    <li><i class="material-icons">dashboard</i> <a routerLink="/dashboard"
+                            [ngClass]="{'active':isDashboardActive}" (click)="activateDashboard()">Dashboard</a></li>
+                    <li><i class="material-icons">business</i> <a routerLink="/departments"
+                            [ngClass]="{'active':isDepartmentActive}" (click)="activateDepartment()">Departments</a>
+                    </li>
                     <li><i class="material-icons">exit_to_app</i> <a href="#logout" (click)="logout()">Log Out</a></li>
                 </ul>
             </nav>
@@ -39,11 +40,13 @@
                         </div>
                         <div *ngIf="!isEditing; else editMode">
                             {{ username }}
-                            <button (click)="editUsername()" class="profile-edit-btn" [class.active]="isEditing" >Edit</button>
+                            <button (click)="editUsername()" class="profile-edit-btn"
+                                [class.active]="isEditing">Edit</button>
                         </div>
                         <ng-template #editMode>
                             <input type="text" [(ngModel)]="editedUsername">
-                            <button (click)="saveUsername()" class="profile-save-btn" [class.active]="isSaving" >Save</button>
+                            <button (click)="saveUsername()" class="profile-save-btn"
+                                [class.active]="isSaving">Save</button>
                         </ng-template>
                     </div>
                 </div>
@@ -56,56 +59,126 @@
             <div class="personal-data" *ngIf="isPersonalInfoActive">
                 <div class="data-row" *ngFor="let field of personalInfoFields">
                     <div class="column">
-                        <div class="label">{{ field.label }}:</div>
+                        <div class="label">{{ field.label }}</div>
                     </div>
                     <div class="column">
-                        <div *ngIf="!field.isEditing" class="value">{{ field.value }}</div>
+                        <div *ngIf="!field.isEditing" class="value">
+                            <span *ngIf="!field.isEditing">{{ field.value }}</span>
+                            <input *ngIf="field.isEditing" [(ngModel)]="field.editedValue" class="edit-input"
+                                type="text">
+                        </div>
                         <div *ngIf="field.isEditing" class="input-container">
-                            <input type="text" [(ngModel)]="field.editedValue" class="edit-input">
-                            <button (click)="saveFieldData(field)" class="save-btn">Save</button>
+                            <div class="dropdown">
+                                <div class="selected-option" (click)="toggleDropdown(field)">
+                                    {{ field.editedValue }}
+                                    <i class="material-icons dropdown-icon">arrow_drop_down</i>
+                                </div>
+                                <div class="dropdown-menu" *ngIf="field.showDropdown">
+                                    <ul>
+                                        <li *ngFor="let option of field.options" (click)="selectOption(field, option)">
+                                            {{ option }}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="column">
-                        <button (click)="editFieldData(field)" class="edit-btn">Edit</button>
+                    <div class="button-container">
+                        <button *ngIf="field.isEditing" (click)="saveFieldData(field)" class="save-btn"
+                            [class.active]="isSaving">Save</button>
+                        <button *ngIf="!field.isEditing" (click)="editFieldData(field)" class="edit-btn"
+                            [class.active]="isEditing">Edit</button>
+                        <button (click)="deleteField(field, personalInfoFields)" class="delete-btn">Delete</button>
+
                     </div>
                 </div>
-                <button (click)="addNewPersonalField()">Add New Field</button>
+                <div *ngIf="isAddingNewField" class="input-container">
+                    <input type="text" [(ngModel)]="newField.label" placeholder="Field Label" class="label-input">
+                    <input type="text" [(ngModel)]="newField.value" placeholder="Field Value" class="value-input">
+                    <button class="addNewPersonalFieldButton" (click)="saveNewField()">Save</button>
+                </div>
+                <button class="addNewPersonalFieldButton" (click)="addNewPersonalField()">Add New Field</button>
             </div>
             <div class="department-data" *ngIf="isDepartmentInfoActive">
                 <div class="data-row" *ngFor="let field of departmentFields">
                     <div class="column">
-                        <div class="label">{{ field.label }}:</div>
+                        <div class="label">{{ field.label }}</div>
                     </div>
                     <div class="column">
-                        <div *ngIf="!field.isEditing" class="value">{{ field.value }}</div>
+                        <div *ngIf="!field.isEditing" class="value">
+                            <span *ngIf="!field.isEditing">{{ field.value }}</span>
+                            <input *ngIf="field.isEditing" [(ngModel)]="field.editedValue" class="edit-input"
+                                type="text">
+                        </div>
                         <div *ngIf="field.isEditing" class="input-container">
-                            <input type="text" [(ngModel)]="field.editedValue" class="edit-input">
-                            <button (click)="saveFieldData(field)" class="save-btn">Save</button>
+                            <div class="dropdown">
+                                <div class="selected-option" (click)="toggleDropdown(field)">
+                                    {{ field.editedValue }}
+                                    <i class="material-icons dropdown-icon">arrow_drop_down</i>
+                                </div>
+                                <div class="dropdown-menu" *ngIf="field.showDropdown">
+                                    <ul>
+                                        <li *ngFor="let option of field.options" (click)="selectOption(field, option)">
+                                            {{ option }}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="column">
-                        <button (click)="editFieldData(field)" class="edit-btn">Edit</button>
+                    <div class="button-container">
+                        <button *ngIf="field.isEditing" (click)="saveFieldData(field)" class="save-btn"
+                            [class.active]="isSaving">Save</button>
+                        <button *ngIf="!field.isEditing" (click)="editFieldData(field)" class="edit-btn"
+                            [class.active]="isEditing">Edit</button>
+                        <button (click)="deleteField(field, departmentFields)" class="delete-btn">Delete</button>
                     </div>
                 </div>
-                <button (click)="addNewDepartmentField()">Add New Field</button>
+                <div *ngIf="isAddingNewField" class="input-container">
+                    <input type="text" [(ngModel)]="newField.label" placeholder="Field Label" class="label-input">
+                    <input type="text" [(ngModel)]="newField.value" placeholder="Field Value" class="value-input">
+                    <button class="addNewDepartmentFieldButton" (click)="saveNewField()">Save</button>
+                </div>
+                <button class="addNewDepartmentFieldButton" (click)="addNewDepartmentField()">Add New Field</button>
             </div>
             <div class="salary-data" *ngIf="isSalaryInfoActive">
                 <div class="data-row" *ngFor="let field of salaryFields">
                     <div class="column">
-                        <div class="label">{{ field.label }}:</div>
+                        <div class="label">{{ field.label }}</div>
                     </div>
                     <div class="column">
-                        <div *ngIf="!field.isEditing" class="value">{{ field.value }}</div>
+                        <div *ngIf="!field.isEditing" class="value">
+                            <span *ngIf="!field.isEditing">{{ field.value }}</span>
+                            <input *ngIf="field.isEditing" [(ngModel)]="field.editedValue" class="edit-input"
+                                type="text">
+                        </div>
                         <div *ngIf="field.isEditing" class="input-container">
-                            <input type="text" [(ngModel)]="field.editedValue" class="edit-input">
-                            <button (click)="saveFieldData(field)" class="save-btn">Save</button>
+                            <div class="dropdown">
+                                <div class="selected-option" (click)="toggleDropdown(field)">
+                                    {{ field.editedValue }}
+                                    <i class="material-icons dropdown-icon">arrow_drop_down</i>
+                                </div>
+                                <div class="dropdown-menu" *ngIf="field.showDropdown">
+                                    <ul>
+                                        <li *ngFor="let option of field.options" (click)="selectOption(field, option)">
+                                            {{ option }}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="column">
-                        <button (click)="editFieldData(field)" class="edit-btn">Edit</button>
+                    <div class="button-container">
+                        <button *ngIf="field.isEditing" (click)="saveFieldData(field)" class="save-btn"
+                            [class.active]="isSaving">Save</button>
+                        <button *ngIf="!field.isEditing" (click)="editFieldData(field)" class="edit-btn"
+                            [class.active]="isEditing">Edit</button>
+                        <button (click)="deleteField(field, salaryFields)" class="delete-btn">Delete</button>
                     </div>
                 </div>
-                <button (click)="addNewSalaryField()">Add New Field</button>
+                <div *ngIf="isAddingNewField" class="input-container">
+                    <input type="text" [(ngModel)]="newField.label" placeholder="Field Label" class="label-input">
+                    <input type="text" [(ngModel)]="newField.value" placeholder="Field Value" class="value-input">
+                    <button class="addNewSalaryFieldButton" (click)="saveNewField()">Save</button>
+                </div>
+                <button class="addNewSalaryFieldButton" (click)="addNewSalaryField()">Add New Field</button>
             </div>
         </div>
     </div>

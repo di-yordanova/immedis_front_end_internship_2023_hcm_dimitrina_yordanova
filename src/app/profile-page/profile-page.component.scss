@@ -3,9 +3,26 @@
     height: 100vh;
     flex-direction: row;
 
+    .sidebar nav ul li a {
+        color: black;
+        text-decoration: none;
+        font-size: 15px;
+        transition: font-size 0.1s ease, color 0.1s ease;
+    }
+
+    .sidebar nav ul li a:hover {
+        font-size: 18px;
+        font-weight: bold;
+        color: #005151;
+    }
+
     .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
         display: flex;
-        width: 220px;
+        width: 170px;
         background: rgba(209, 223, 223, 0.5);
         padding: 5px;
         box-sizing: border-box;
@@ -14,11 +31,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        z-index: 100;
 
         .logo {
             margin-top: 10px;
-            width: 150px;
-            height: 50px;
+            width: 90px;
+            height: 30px;
             margin-bottom: 20px;
             border-radius: 30px;
             text-align: center;
@@ -47,14 +65,7 @@
             color: black;
             text-decoration: none;
         }
-
-        .active {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
     }
-
 
     .content {
         display: flex;
@@ -66,10 +77,12 @@
         font-size: 26px;
         color: #005151;
         font-family: "Gill Sans", sans-serif;
+        margin-left: 170px;
 
         .profile-page-name {
+            margin: 5px;
             color: #005151;
-            font-size: 40px;
+            font-size: 32px;
             padding-bottom: 15px;
         }
 
@@ -111,11 +124,6 @@
             cursor: pointer;
         }
 
-        .avatar-container:hover .change-photo-overlay {
-            opacity: 1;
-            cursor: pointer;
-        }
-
         .change-icon {
             color: white;
             font-size: 36px;
@@ -142,29 +150,81 @@
         }
 
         .profile-edit-btn {
-            background: radial-gradient(#f7e89d, #079999);
+            background: radial-gradient(#f9f6e8, #ffdc27);
             color: black;
             font-weight: 500;
+            transition: transform 0.3s ease;
+
+            &:hover {
+                transform: scale(1.1);
+            }
         }
 
         .profile-save-btn {
             background: linear-gradient(#2fcebb, #005151);
             color: white;
             font-weight: 500;
-        }
-
-        .edit-input {
-            border-radius: 30px;
-            padding: 5px;
-            border-color: #f7e89d;
-        }
-
-        .profile-edit-btn.active,
-        .profile-save-btn.active {
-            transform: scale(1.1);
             transition: transform 0.3s ease;
+
+            &:hover {
+                transform: scale(1.1);
+            }
         }
 
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+
+            .edit-btn {
+                border-radius: 30px;
+                background: radial-gradient(#f9f6e8, #ffdc27);
+                transition: transform 0.3s ease;
+                border: none;
+                padding: 8px 16px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin-left: auto;
+                display: flex;
+
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+
+            .save-btn {
+                border-radius: 30px;
+                background: linear-gradient(#2fcebb, #005151);
+                color: white;
+                transition: transform 0.3s ease;
+                margin-left: auto;
+                display: flex;
+
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+
+            .delete-btn {
+                background: linear-gradient(#e89b96, #f44336);
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                text-align: center;
+                text-decoration: none;
+                display: flex;
+                font-size: 14px;
+                transition: transform 0.3s ease;
+                margin-left: auto;
+
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+
+        }
 
         .sections {
             display: flex;
@@ -172,45 +232,56 @@
             justify-content: space-around;
             width: 100%;
             margin-bottom: 20px;
-        }
 
-        .section {
-            cursor: pointer;
-            padding: 10px 20px;
-            background-color: #ddd;
-            border-radius: 30px;
-            margin-top: 10px;
-            height: 20px;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(#f7e89d, #ffdc27);
-        }
+            .section {
+                cursor: pointer;
+                padding: 10px 20px;
+                background-color: #ddd;
+                border-radius: 30px;
+                margin-top: 10px;
+                height: 20px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(#f7e89d, #ffdc27);
+                transition: transform 0.3s ease;
 
-        .section.active {
-            background: linear-gradient(#2fcebb, #005151);
-            color: white;
-            transform: scale(1.1);
-            /* Уголемява бутона с 10% при натискане */
-            transition: transform 0.3s ease;
-            /* Плавен преход за трансформацията */
-        }
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
 
-        .personal-data {
+            .section.active {
+                background: linear-gradient(#2fcebb, #005151);
+                color: white;
+                transform: scale(1.2);
+                transition: transform 0.3s ease;
+            }
+
+        }
+        .personal-data,
+        .department-data,
+        .salary-data {
             display: flex;
             flex-direction: column;
         }
 
         .data-row {
-            display: flex;
+            display: grid;
+            flex-direction: row;
+            grid-template-columns: repeat(3, 1fr);
             justify-content: space-between;
             align-items: center;
             margin-bottom: 5px;
         }
 
         .column {
-            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            grid-column: span 1;
+            width: 100%;
         }
 
         .label {
@@ -219,33 +290,96 @@
         }
 
         .value {
-            margin-right: 10px;
+            margin-right: 0px;
             font-weight: 300;
             font-size: 16px;
         }
 
-        .personal-edit-btn {
-            background: linear-gradient(#2fcebb, #005151);
-            color: white;
-            font-weight: 300;
-            padding: 10px 20px;
-            font-size: 10px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-left: auto;
-            display: flex;
-            align-items: left;
+        .dropdown {
+            position: relative;
+            display: inline-block;
+
+            .selected-option {
+                cursor: pointer;
+                padding: 10px;
+                border-radius: 10px;
+                background: radial-gradient(#f9f6e8, #ffee9a);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 16px;
+                font-weight: 200;
+            }
+
+            .dropdown-icon {
+                margin-left: 10px;
+                font-size: 16px;
+            }
+
+            .dropdown-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: radial-gradient(#f9f6e8, #ffee9a);
+                border-radius: 0px 0px 10px 10px;
+                overflow: hidden;
+                z-index: 1;
+                display: flex;
+            }
+
+            .dropdown-option {
+                padding: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .dropdown-menu.active {
+                display: flex;
+            }
+
+            .dropdown-option:hover {
+                background-color: #ffdc27;
+            }
         }
 
-        .edit-btn {
+        .addNewPersonalFieldButton {
             border-radius: 30px;
-            background: radial-gradient(#f7e89d, #079999);
+            background: linear-gradient(#e3ffe3, #5cac5c);
+            color: #005151;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+            width: 150px;
+
+            &:hover {
+                transform: scale(1.1);
+            }
         }
 
-        .save-btn {
+        .addNewDepartmentFieldButton {
             border-radius: 30px;
-            background: radial-gradient(#f7e89d, #f5c800);
+            background: linear-gradient(#e3ffe3, #5cac5c);
+            color: #005151;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+            width: 150px;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+
+        .addNewSalaryFieldButton {
+            border-radius: 30px;
+            background: linear-gradient(#e3ffe3, #5cac5c);
+            color: #005151;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+            width: 150px;
+
+            &:hover {
+                transform: scale(1.1);
+            }
         }
     }
 }

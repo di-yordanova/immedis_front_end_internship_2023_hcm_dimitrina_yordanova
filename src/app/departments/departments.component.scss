@@ -3,9 +3,26 @@
     height: 100vh;
     flex-direction: row;
 
+    .sidebar nav ul li a {
+        color: black;
+        text-decoration: none;
+        font-size: 15px;
+        transition: font-size 0.1s ease, color 0.1s ease;
+    }
+
+    .sidebar nav ul li a:hover {
+        font-size: 18px;
+        font-weight: bold;
+        color: #005151;
+    }
+
     .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
         display: flex;
-        width: 220px;
+        width: 170px;
         background: rgba(209, 223, 223, 0.5);
         padding: 5px;
         box-sizing: border-box;
@@ -14,11 +31,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        z-index: 100;
 
         .logo {
             margin-top: 10px;
-            width: 150px;
-            height: 50px;
+            width: 90px;
+            height: 30px;
             margin-bottom: 20px;
             border-radius: 30px;
             text-align: center;
@@ -48,11 +66,6 @@
             text-decoration: none;
         }
 
-        .active {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
     }
 
     .content {
@@ -62,14 +75,138 @@
         align-items: left;
         width: 100%;
         padding: 25px;
-        font-size: 26px;
         color: #005151;
         font-family: "Gill Sans", sans-serif;
+        margin-left: 170px;
+        font-size: 18px;
 
         .departments-name {
+            margin: 5px;
             color: #005151;
-            font-size: 40px;
+            font-size: 32px;
             padding-bottom: 15px;
+        }
+
+        .squares-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; 
+            justify-content: center; 
+        }
+
+        .square {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            width: 250px; 
+            height: 250px; 
+            background-color: #f7f7f7; 
+            border: 1px solid #ddd; 
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+            overflow: hidden;
+            border-radius: 30px;
+
+            .image-container {
+                position: relative;
+                width: 100%;
+                height: 70%;
+                overflow: hidden;
+                border-bottom: 1px solid #ccc;
+
+                .square-title,
+                .square-subtitle {
+                    width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    padding: 0 5px;
+                    border: none;
+                    background: transparent;
+
+                    &:focus {
+                        outline: none;
+                    }
+
+                    .square-title {
+                        height: 15%;
+                        margin: 5px 0;
+                    }
+
+                    .square-subtitle {
+                        height: 10%;
+                        margin: 5px 0;
+                    }
+
+                }
+
+                .square-image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    object-position: center;
+                    max-width: 100%;
+                    max-height: 90%;
+                    margin-bottom: 5px;
+                    border-radius: 30px;
+
+                    .change-icon {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: rgba(255, 255, 255, 0.7);
+                        font-size: 2em;
+                        display: none;
+                        cursor: pointer;
+                    }
+
+                    &:hover .change-icon {
+                        display: block;
+                    }
+                }
+
+                .change-photo-overlay {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 50%;
+                    height: 50%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    clip-path: inset(10% round 50px);
+
+                    .avatar-container:hover .change-photo-overlay {
+                        opacity: 1;
+                        cursor: pointer;
+                    }
+
+                    .change-icon {
+                        color: white;
+                        font-size: 36px;
+                    }
+                }
+
+                &:hover .change-photo-overlay {
+                    opacity: 1;
+                }
+            }
+
+            .square-title {
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 5px;
+            }
+
+            .square-subtitle {
+                font-size: 0.9em;
+                text-align: center;
+            }
         }
     }
 }
