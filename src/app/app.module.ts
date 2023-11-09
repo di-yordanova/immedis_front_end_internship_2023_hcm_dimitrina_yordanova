@@ -26,6 +26,7 @@ import { DepartmentsComponent } from './departments/departments.component';
     MatSlideToggleModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule 
   ],
   providers: [],
   bootstrap: [AppComponent]
