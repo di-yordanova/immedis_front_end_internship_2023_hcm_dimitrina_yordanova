@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="dashboard.component.scss">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <img class="logo" src="/assets/logo-green.png">
+            <nav>
+                <ul>
+                    <li><i class="material-icons">person</i> <a routerLink="/profile-page"
+                            [ngClass]="{'active': isProfileActive}" (click)="activateProfile()">Profile</a></li>
+                    <li><i class="material-icons">dashboard</i> <a routerLink="/dashboard"
+                            [ngClass]="{'active':isDashboardActive}" (click)="activateDashboard()">Dashboard</a></li>
+                    <li><i class="material-icons">business</i> <a routerLink="/departments"
+                            [ngClass]="{'active':isDepartmentActive}" (click)="activateDepartment()">Departments</a>
+                    </li>
+                    <li><i class="material-icons">exit_to_app</i> <a href="#logout" (click)="logout()">Log Out</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="content">
+            <div class="profile-section">
+                <div class="profile-section">
+                    <div class="dashboard-name">Dashboard</div>
+                </div>
+                <div class="left-section">
+                    <div class="avatar-container" (mouseenter)="isHovered = true" (mouseleave)="isHovered = false">
+                        <img *ngIf="userAvatar" [src]="userAvatar" class="user-avatar" alt="User Avatar">
+                        <div *ngIf="isHovered" class="change-photo-overlay" (click)="onProfileImageClick('left')">
+                            <i class="material-icons change-icon">camera_alt</i>
+                        </div>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-info-header" *ngIf="!isHeaderEditing; else editHeaderMode">
+                            <h2>{{ headerTitle }}</h2>
+                            <p>{{ subHeader }}</p>
+                            <button (click)="editHeader()" class="profile-edit-btn">Edit</button>
+                        </div>
+                        <ng-template #editHeaderMode>
+                            <input type="text" [(ngModel)]="headerTitle">
+                            <input type="text" [(ngModel)]="subHeader">
+                            <button (click)="saveHeader()" class="profile-save-btn">Save</button>
+                        </ng-template>
+                        <div *ngIf="!isEditing; else editMode" [style.fontSize]="dynamicFontSize" class="edited-text-display">
+                            {{ editedText }}
+                            <button (click)="editText()" class="profile-edit-btn">Edit</button>
+                        </div>
+                        <ng-template #editMode>
+                            <input type="text" [(ngModel)]="editedText">
+                            <button (click)="saveText()" class="profile-save-btn">Save</button>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="right-section">
+                    <div class="avatar-container-right" (mouseenter)="isHovered = true" (mouseleave)="isHovered = false">
+                        <img *ngIf="userAvatarRight" [src]="userAvatarRight" class="user-avatar-right" alt="User Avatar Right">
+                        <div *ngIf="isHovered" class="change-photo-overlay-right" (click)="onProfileImageClick('right')">
+                            <i class="material-icons change-icon-right">camera_alt</i>
+                        </div>
+                    </div>
+                    <div class="user-info-right">
+                        <div class="user-info-header-right" *ngIf="!isHeaderEditingRight; else editHeaderModeRight">
+                            <h2>{{ headerTitleRight }}</h2>
+                            <p>{{ subHeaderRight }}</p>
+                            <button (click)="editHeaderRight()" class="profile-edit-btn-right">Edit</button>
+                        </div>
+                        <ng-template #editHeaderModeRight>
+                            <input type="text" [(ngModel)]="headerTitleRight">
+                            <input type="text" [(ngModel)]="subHeaderRight">
+                            <button (click)="saveHeaderRight()" class="profile-save-btn-right">Save</button>
+                        </ng-template>
+                        <div *ngIf="!isEditingRight; else editModeRight" [style.fontSize]="dynamicFontSize" class="edited-text-display-right">
+                            {{ editedTextRight }}
+                            <button (click)="editTextRight()" class="profile-edit-btn-right">Edit</button>
+                        </div>
+                        <ng-template #editModeRight>
+                            <input type="text" [(ngModel)]="editedTextRight">
+                            <button (click)="saveTextRight()" class="profile-save-btn-right">Save</button>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

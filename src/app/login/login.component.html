@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCM Login</title>
+    <link rel="stylesheet" href="login.component.scss"> 
+</head>
+
+<div class="container">
+    <div class="login-container">
+        <h1>Human Capital Management</h1>
+        <div class="content">
+            <div class="left-section">
+                <img src="https://www.talentcanada.ca/wp-content/uploads/2020/08/Screen-Shot-2020-08-31-at-12.01.19-PM.png"
+                    alt="Company Logo" class="logo">
+            </div>
+            <div class="right-section">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <input type="text" formControlName="username" required placeholder="Username">
+                        <div class="error-message">{{ loginForm.get('errorMessageUsername')?.value }}</div>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" formControlName="password" required placeholder="Password">
+                        <div class="error-message">{{ loginForm.get('errorMessagePassword')?.value }}</div>
+                    </div>
+                    <button type="submit" [disabled]="!loginForm.valid">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>
